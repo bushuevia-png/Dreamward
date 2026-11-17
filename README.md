@@ -1,9 +1,5 @@
 ﻿# Dreamward (Somnium) — 2D-игра в жанре психологической пошаговой RPG
 
-**Репозиторий:** https://github.com/bushuevia-png/Dreamward  
-**Разработчик:** Бушуев И. А., группа 2407г2  
-**Руководитель:** Банников В. С.  
-**Дисциплина:** Разработка программных модулей (5 семестр)  
 **Платформа:** WPF (.NET 10, C# 12, MVVM, Entity Framework Core SQLite, System.Text.Json)
 
 ---
