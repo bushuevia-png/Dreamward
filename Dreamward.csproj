@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <LangVersion>12.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>Dreamward</AssemblyName>
+    <RootNamespace>Dreamward</RootNamespace>
+    <Authors>Бушуев И. А., группа 2407г2</Authors>
+    <Product>Dreamward (Somnium) — Психологическая пошаговая 2D RPG</Product>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Архитектурный каркас MVVM по п. 4.5 ТЗ -->
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+    <!-- Локальная реляционная СУБД SQLite и ORM EF Core по п. 4.1 и 4.5 ТЗ -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

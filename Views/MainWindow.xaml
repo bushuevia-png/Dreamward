@@ -1,0 +1,86 @@
+﻿<Window x:Class="Dreamward.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Dreamward (Somnium) — Бушуев И. А. (2407г2)"
+        Width="1280" Height="720" MinWidth="1280" MinHeight="720"
+        WindowStartupLocation="CenterScreen"
+        Background="#090A10" Foreground="#E2E8F0"
+        KeyDown="Window_KeyDown" Focusable="True">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 1. ВЕРХНЯЯ ПАНЕЛЬ HUD (HP, SP, УРОВЕНЬ СТРАХА 0-100%) -->
+        <Border Grid.Row="0" Background="#121521" BorderBrush="#262B40" BorderThickness="1" CornerRadius="12" Padding="16,10" Margin="0,0,0,12">
+            <UniformGrid Columns="3">
+                <StackPanel Margin="0,0,16,0">
+                    <TextBlock Text="{Binding CurrentHP, StringFormat='ЗДОРОВЬЕ (HP): {0} / 100'}" Foreground="#FB7185" FontWeight="Bold"/>
+                    <ProgressBar Value="{Binding CurrentHP}" Maximum="{Binding MaxHP}" Height="10" Foreground="#F43F5E" Background="#1E293B" Margin="0,6,0,0"/>
+                </StackPanel>
+
+                <StackPanel Margin="0,0,16,0">
+                    <TextBlock Text="{Binding CurrentSP, StringFormat='СПОСОБНОСТИ (SP): {0} / 60'}" Foreground="#38BDF8" FontWeight="Bold"/>
+                    <ProgressBar Value="{Binding CurrentSP}" Maximum="{Binding MaxSP}" Height="10" Foreground="#0EA5E9" Background="#1E293B" Margin="0,6,0,0"/>
+                </StackPanel>
+
+                <StackPanel>
+                    <TextBlock Text="{Binding FearLevel, StringFormat='УРОВЕНЬ СТРАХА: {0}%'}" Foreground="#FBBF24" FontWeight="Bold"/>
+                    <ProgressBar Value="{Binding FearLevel}" Maximum="100" Height="10" Foreground="#F59E0B" Background="#1E293B" Margin="0,6,0,0"/>
+                </StackPanel>
+            </UniformGrid>
+        </Border>
+
+        <!-- 2. ИГРОВОЕ ПРОСТРАНСТВО CANVAS И ОВЕРЛЕЙ БОЯ -->
+        <Border Grid.Row="1" BorderBrush="#262B40" BorderThickness="2" CornerRadius="12" ClipToBounds="True">
+            <Grid>
+                <!-- Двумерное пространство сновидений на базе Canvas (п. 3 и 4.1 ТЗ) -->
+                <Canvas x:Name="WorldCanvas" Width="800" Height="480" Background="#0F1222">
+                    <!-- Точка сохранения (Зеркало Реальности) -->
+                    <Border Canvas.Left="110" Canvas.Top="100" Width="46" Height="54" Background="#8B5CF6" CornerRadius="8"/>
+                    <!-- Игровой персонаж -->
+                    <Border Canvas.Left="{Binding PlayerX}" Canvas.Top="{Binding PlayerY}"
+                            Width="28" Height="28" Background="#312E81" BorderBrush="#A78BFA" BorderThickness="2" CornerRadius="6"/>
+                </Canvas>
+
+                <!-- Оверлей пошагового сражения (ATTACK, ACT/SKILL, ITEM, MERCY/RUN) -->
+                <Border Background="#EB080912" Padding="24" Visibility="{Binding IsInBattle, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0">
+                            <TextBlock Text="{Binding EnemyName}" FontSize="22" FontWeight="Bold" Foreground="White"/>
+                            <ProgressBar Value="{Binding EnemyHP}" Maximum="{Binding EnemyMaxHP}" Height="12" Foreground="#EF4444" Margin="0,8"/>
+                        </StackPanel>
+
+                        <Border Grid.Row="1" Background="#05060A" BorderBrush="#1E293B" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,12">
+                            <TextBlock Text="{Binding BattleLog}" FontFamily="Consolas" TextWrapping="Wrap"/>
+                        </Border>
+
+                        <UniformGrid Grid.Row="2" Columns="4">
+                            <Button Content="ATTACK (Атака)" Command="{Binding AttackCommand}" Margin="4" Padding="12,10" Background="#BE123C" Foreground="White" FontWeight="Bold"/>
+                            <Button Content="ACT / SKILL" Command="{Binding UseSkillCommand}" CommandParameter="CALM" Margin="4" Padding="12,10" Background="#0369A1" Foreground="White" FontWeight="Bold"/>
+                            <Button Content="ПРОРЫВ ПАНИКИ (71%+)" Command="{Binding UseSkillCommand}" CommandParameter="DESPERATE" Margin="4" Padding="12,10" Background="#B45309" Foreground="White" FontWeight="Bold"/>
+                            <Button Content="СОХРАНИТЬ (SQLite)" Command="{Binding TriggerSavePointCommand}" Margin="4" Padding="12,10" Background="#047857" Foreground="White" FontWeight="Bold"/>
+                        </UniformGrid>
+                    </Grid>
+                </Border>
+
+                <!-- Оверлей плавного затемнения Fade-In / Fade-Out через свойство Opacity (п. 4.1 ТЗ) -->
+                <Border x:Name="FadeOverlay" Background="Black" Opacity="0" IsHitTestVisible="False"/>
+            </Grid>
+        </Border>
+
+        <!-- 3. НИЖНЕЕ ДИАЛОГОВОЕ ОКНО СООБЩЕНИЙ -->
+        <Border Grid.Row="2" Background="#121521" BorderBrush="#262B40" BorderThickness="1" CornerRadius="12" Padding="16,12" Margin="0,12,0,0">
+            <TextBlock Text="{Binding DialogMessage}" FontFamily="Consolas" FontSize="14" Foreground="#E2E8F0"/>
+        </Border>
+    </Grid>
+</Window>
